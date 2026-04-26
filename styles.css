@@ -420,6 +420,120 @@ body { font-family: var(--sans); font-feature-settings: "ss01","cv11","tnum"; fo
 .num-neg::before { content: "("; }
 .num-neg::after { content: ")"; }
 
+/* ——— Cash Position Summary ——— */
+.cash-pos-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+}
+.cash-pos-summary.single { grid-template-columns: 1fr; }
+.cps-period {
+  padding: 18px 22px 16px;
+  border-right: 1px solid var(--rule);
+}
+.cps-period:last-child { border-right: 0; }
+.cps-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+.cps-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+}
+.cps-range {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  font-family: var(--mono);
+}
+.cps-flow {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+  gap: 14px;
+  align-items: end;
+  position: relative;
+}
+.cps-stop {
+  display: flex; flex-direction: column; gap: 4px;
+  position: relative;
+}
+.cps-stop-k {
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+}
+.cps-stop-v {
+  font-family: var(--serif);
+  font-size: 24px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--ink-900);
+  margin-top: 2px;
+}
+.cps-stop-v.pos { color: var(--pos); }
+.cps-stop-v.neg { color: var(--neg); }
+.cps-stop.final .cps-stop-v { color: var(--gold-700); }
+.cps-stop-d {
+  font-size: 10px;
+  color: var(--ink-500);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.cps-bar {
+  height: 5px;
+  background: var(--ink-700);
+  margin-top: 6px;
+  margin-bottom: 2px;
+  max-width: 100%;
+}
+.cps-bar.opening { background: var(--ink-700); }
+.cps-bar.inflow  { background: var(--pos); }
+.cps-bar.outflow { background: var(--neg); }
+.cps-bar.closing { background: var(--gold-600); }
+
+/* ——— Cash Instruments Summary ——— */
+.cash-inst-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-bottom: 1px solid var(--rule-strong);
+  padding-bottom: 14px;
+}
+.cash-inst-summary > div {
+  padding-right: 18px;
+  border-right: 1px solid var(--rule);
+}
+.cash-inst-summary > div:last-child { border-right: 0; padding-right: 0; }
+.cash-inst-summary > div + div { padding-left: 18px; }
+.cis-k {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin-bottom: 4px;
+}
+.cis-v {
+  font-family: var(--serif);
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-900);
+}
+.cis-v.gold { color: var(--gold-700); }
+.cis-d { font-size: 10.5px; margin-top: 4px; }
+
 /* ——— Mini stack bar legend ——— */
 .stack-legend {
   display: grid;
@@ -430,3 +544,117 @@ body { font-family: var(--sans); font-feature-settings: "ss01","cv11","tnum"; fo
 }
 .stack-legend .item { display: inline-flex; align-items: center; gap: 6px; }
 .stack-legend .sw { width: 12px; height: 8px; display: inline-block; }
+
+/* ——— Cash Balance Waterfall ——— */
+.cbw-period {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  padding: 14px 16px 10px;
+}
+.cbw-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 8px;
+}
+.cbw-label {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink-900);
+}
+.cbw-range {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--ink-500);
+  text-transform: uppercase;
+}
+.cbw-foot {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  font-size: 11.5px;
+  color: var(--ink-700);
+}
+.cbw-delta { font-variant-numeric: tabular-nums; }
+.cbw-delta .muted { color: var(--ink-500); margin-left: 4px; }
+
+/* ——— Forecast Quarterly Table ——— */
+.forecast-table tr.section-row td {
+  background: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--rule-strong);
+  border-top: 1px solid var(--rule-strong);
+}
+.forecast-table tr.subtotal td {
+  background: var(--paper-2);
+  border-top: 1px solid var(--ink-700);
+  border-bottom: 1px solid var(--ink-700);
+  color: var(--ink-900);
+}
+.forecast-table tr.anchor td {
+  background: #f7f1e2;
+  border-top: 2px solid var(--ink-900);
+  border-bottom: 2px solid var(--ink-900);
+  color: var(--ink-900);
+  font-family: var(--serif);
+  font-size: 13.5px;
+}
+.forecast-table tr.net td {
+  border-top: 1px solid var(--ink-700);
+  border-bottom: 1px solid var(--ink-700);
+}
+
+/* ——— Tabular Cash Flow (monthly direct method) ——— */
+.tcf-wrap { width: 100%; overflow-x: auto; }
+.tcf {
+  font-size: 10.5px;
+  min-width: 1080px;
+}
+.tcf th, .tcf td { padding: 5px 8px; }
+.tcf th.tcf-line, .tcf td:first-child {
+  position: sticky; left: 0;
+  background: var(--paper);
+  z-index: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+.tcf th.tcf-total, .tcf td.tcf-total {
+  border-left: 1px solid var(--ink-700);
+  background: var(--paper-2);
+}
+.tcf tr.tcf-section td {
+  background: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  padding: 5px 8px;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+}
+.tcf tr.tcf-subtotal td {
+  background: var(--paper-2);
+  border-top: 1px solid var(--ink-700);
+  border-bottom: 1px solid var(--ink-700);
+  color: var(--ink-900);
+}
+.tcf tr.tcf-net td {
+  border-top: 1px solid var(--ink-700);
+  border-bottom: 1px solid var(--ink-700);
+  background: #fdfaf1;
+}
+.tcf tr.tcf-anchor td {
+  background: #f7f1e2;
+  border-top: 2px solid var(--ink-900);
+  border-bottom: 2px solid var(--ink-900);
+  color: var(--ink-900);
+  font-weight: 500;
+}

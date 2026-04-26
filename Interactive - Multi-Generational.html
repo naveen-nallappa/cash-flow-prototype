@@ -3,13 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cash Flow Exhibits — Meridian Family Office</title>
+  <title>Multi-Generational Family — Interactive · Meridian Family Office</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <style>
-    body { background: #ece6d8; }
+    body { background: #ece6d8; margin: 0; }
+    .page-frame { max-width: 1280px; margin: 0 auto; padding: 32px 0; }
+    .nav-toolbar {
+      position: fixed; top: 12px; left: 16px; z-index: 100;
+      font-family: 'Inter Tight', sans-serif;
+    }
+    .nav-toolbar a {
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 6px 12px; background: rgba(14,22,32,0.9); color: #fbf8f3;
+      border: 1px solid rgba(251,248,243,0.2); text-decoration: none;
+      backdrop-filter: blur(6px);
+    }
+    .nav-toolbar a:hover { background: #0e1620; }
   </style>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -17,34 +29,18 @@
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div id="root"></div>
+  <div class="nav-toolbar">
+    <a href="index.html">← All Reports</a>
+  </div>
+  <div class="page-frame">
+    <div id="root"></div>
+  </div>
 
-  <script type="text/babel" src="design-canvas.jsx"></script>
   <script type="text/babel" src="charts.jsx"></script>
   <script type="text/babel" src="report-business-owner.jsx"></script>
-  <script type="text/babel" src="report-post-liquidity.jsx"></script>
   <script type="text/babel" src="report-multigen.jsx"></script>
-
   <script type="text/babel" data-presets="react">
-    function App() {
-      return (
-        <window.DesignCanvas title="Cash Flow Exhibits" subtitle="Meridian Family Office · Three UHNW client archetypes">
-          <window.DCSection id="archetypes" title="Three Client Archetypes — Calendar Year 2025">
-            <window.DCArtboard id="biz-owner" label="Operating Business Owner — $285M NW · 7 entities" width={1280} height={3200}>
-              <window.ReportBusinessOwner />
-            </window.DCArtboard>
-            <window.DCArtboard id="post-liquidity" label="Post-Liquidity Entrepreneur — $340M NW · year one post-exit" width={1280} height={3200}>
-              <window.ReportPostLiquidity />
-            </window.DCArtboard>
-            <window.DCArtboard id="multigen" label="Multi-Generational Family — $420M NW · 6 entities · 3 generations" width={1280} height={3500}>
-              <window.ReportMultiGen />
-            </window.DCArtboard>
-          </window.DCSection>
-        </window.DesignCanvas>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    ReactDOM.createRoot(document.getElementById('root')).render(<window.ReportMultiGen />);
   </script>
 </body>
 </html>

@@ -70,6 +70,53 @@ function ReportPostLiquidity() {
     ]},
   ];
 
+  // Inflow drilldown — by source with line-item breakdown
+  const inflowDrilldown = [
+    { name: "Investment Income (Treasuries, MMF)", color: "#0e1620", value: inflowSources[0].values.reduce((a,b)=>a+b,0), children: [
+      { name: "T-Bill Roll Yield (3·6 mo ladder)", value: 3.10e6, tag: "Brokered" },
+      { name: "Government MMF — SWVXX", value: 1.85e6, tag: "Daily liquidity" },
+      { name: "Short-Duration Treasury ETF (SGOV)", value: 1.35e6 },
+      { name: "Municipal Bond Interest", value: 0.30e6, tag: "Tax-exempt" },
+    ]},
+    { name: "Dividends", color: "#4a5468", value: inflowSources[1].values.reduce((a,b)=>a+b,0), children: [
+      { name: "Public Equity — Index ETFs", value: 1.85e6, tag: "Qualified" },
+      { name: "Concentrated Stock — Q1/Q3 dividends", value: 1.04e6, tag: "Pre-diversification" },
+      { name: "International Equity Sleeve", value: 0.50e6 },
+    ]},
+    { name: "PE / VC Distributions", color: "#8a6a2e", value: inflowSources[2].values.reduce((a,b)=>a+b,0), children: [
+      { name: "PE Fund Distributions (8 funds)", value: 1.85e6, tag: "Mostly recallable" },
+      { name: "VC Fund Distributions (12 funds)", value: 0.62e6, tag: "Cash + stock" },
+      { name: "Direct Investment Exits", value: 0.45e6 },
+    ]},
+    { name: "Sale Escrow Releases (one-time)", color: "#b89657", value: 11.00e6, children: [
+      { name: "TechCo Acquisition — Tranche 2 (12 mo)", value: 8.50e6, tag: "Released Jun 2025" },
+      { name: "Working Capital True-up (final)", value: 1.50e6, tag: "Net of indemnity" },
+      { name: "Earnout Hit — Performance Threshold", value: 1.00e6 },
+    ]},
+    { name: "Other (royalty, advisory)", color: "#d8c393", value: inflowSources[4].values.reduce((a,b)=>a+b,0), children: [
+      { name: "Board Compensation (3 boards)", value: 0.95e6 },
+      { name: "Advisory Retainers", value: 0.62e6 },
+      { name: "Royalties & Speaking", value: 0.63e6 },
+    ]},
+  ];
+
+  // Outflow stacked monthly (mirrors inflow stack)
+  const outflowSources = [
+    { name: "Federal & State Taxes",     color: "#0e1620", values: [0.18,0.16,3.65,8.20,0.20,3.85,0.18,0.16,3.65,0.20,0.18,1.95].map(v=>v*1e6) },
+    { name: "Capital Deployment",         color: "#1f4a4f", values: [0.40,0.35,0.65,0.85,0.95,1.20,0.80,0.55,0.70,0.65,0.80,2.30].map(v=>v*1e6) },
+    { name: "Lifestyle & Household",      color: "#4a5468", values: [0.22,0.20,0.30,0.25,0.28,0.30,0.28,0.32,0.30,0.30,0.30,0.15].map(v=>v*1e6) },
+    { name: "Philanthropy",               color: "#8a6a2e", values: [0,0,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,3.80].map(v=>v*1e6) },
+    { name: "Debt Service",               color: "#6b7587", values: Array(12).fill(0.1125e6) },
+    { name: "Professional & Other",       color: "#d8c393", values: [0.04,0.05,0.13,0.07,0.07,0.08,0.10,0.13,0.18,0.13,0.13,0.39].map(v=>v*1e6) },
+  ];
+
+  const cashInstruments = [
+    { name: "Operating Cash · Checking",  custodian: "First Republic / JPM",  balance: 2.20e6,   yield: 0.10, tenor: "On demand", note: "Trust + 4 LLC ops accounts", color: "#6b7587" },
+    { name: "Bank Deposits · HY Savings", custodian: "Meridian Pvt. Bank",    balance: 8.50e6,   yield: 4.25, tenor: "On demand", note: "Pledged to SBL · sweep tier 1", color: "#4a5468" },
+    { name: "Money Market Funds · Gov't", custodian: "Schwab · SNVXX",         balance: 62.40e6,  yield: 4.85, tenor: "T+1 liquidity", note: "Primary liquidity sleeve", color: "#0e1620" },
+    { name: "Term Deposits · CD Ladder",  custodian: "Brokered, multi-bank",   balance: 18.80e6,  yield: 5.05, tenor: "3·6·9·12 mo rungs", note: "Funds 2026 PE call schedule", color: "#a3823f" },
+  ];
+
   const calls = [
     { m: "JAN", calls: 0.40e6, dist: 0.05e6 },
     { m: "FEB", calls: 0.35e6, dist: 0.05e6 },
@@ -87,7 +134,7 @@ function ReportPostLiquidity() {
 
   return (
     <div className="report compact">
-      <div className="runner left">MERIDIAN · CASH FLOW EXHIBIT</div>
+      <div className="runner left">MERIDIAN · ANNUAL CASH FLOW STATEMENT</div>
       <div className="runner right">FY 2025 / FY 2026 OUTLOOK</div>
 
       <Mast archetype="Reyes Trust · Post-Liquidity Entrepreneur" period="Calendar Year 2025 / 2026 Outlook" />
@@ -116,6 +163,20 @@ function ReportPostLiquidity() {
         <div className="kpi"><span className="label">Net Cash Movement</span><span className="num">{fmt.m(totalNet)}</span><span className="delta neg">{fmt.pct((totalNet/totalIn)*100)} of inflows</span></div>
       </div>
 
+      {/* Cash Position Summary */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">CASH BALANCE WATERFALL</span><h2>Opening → Inflows → Outflows → Closing</h2></div>
+          <div className="right">Calendar 2025 · YTD 2026</div>
+        </div>
+        <div className="frame">
+          <CashBalanceWaterfall periods={[
+            { label: "FY 2025 (Closed)", asOfStart: "Jan 1, 2025", asOfEnd: "Dec 31, 2025", opening: 168.00e6, inflows: totalIn, outflows: totalOut, closing: 158.00e6 },
+            { label: "YTD 2026", asOfStart: "Jan 1, 2026", asOfEnd: "Apr 25, 2026", opening: 158.00e6, inflows: 4.20e6, outflows: 9.80e6, closing: 152.40e6 },
+          ]} />
+        </div>
+      </div>
+
       <div className="section">
         <div className="section-head">
           <div><span className="eyebrow">EXHIBIT 01</span><h2>Monthly Inflows, Outflows & Net Position</h2></div>
@@ -123,11 +184,11 @@ function ReportPostLiquidity() {
         </div>
         <div className="frame">
           <div className="legend" style={{ marginBottom: 8 }}>
-            <span className="item"><span className="sw" style={{ background: "#2f6b3a" }}></span>Inflows</span>
-            <span className="item"><span className="sw" style={{ background: "#8a3a2b" }}></span>Outflows</span>
+            <span className="item"><span className="sw" style={{ background: "#2f6b3a" }}></span>Inflows (above zero)</span>
+            <span className="item"><span className="sw" style={{ background: "#8a3a2b" }}></span>Outflows (below zero)</span>
             <span className="item"><span className="sw" style={{ background: "#0e1620", borderRadius: "50%" }}></span>Net (dotted)</span>
           </div>
-          <MonthlyFlowChart data={monthly} />
+          <MonthlyFlowChartSigned data={monthly} />
         </div>
       </div>
 
@@ -165,9 +226,66 @@ function ReportPostLiquidity() {
         </div>
       </div>
 
+      {/* Inflow drilldown */}
       <div className="section">
         <div className="section-head">
-          <div><span className="eyebrow">EXHIBIT 04</span><h2>Outflows by Category — Drilldown</h2></div>
+          <div><span className="eyebrow">EXHIBIT 04</span><h2>Inflows — Drilldown by Source</h2></div>
+          <div className="right">Click row to expand · USD</div>
+        </div>
+        <div className="frame">
+          <DrilldownList items={inflowDrilldown} total={totalIn} />
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 8px 4px", borderTop: "1px solid var(--ink-700)", marginTop: 4 }}>
+            <span style={{ fontWeight: 600 }}>Total Inflows</span>
+            <span style={{ fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>{fmt.full(totalIn)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Outflows mirrored — stacked monthly + composition donut */}
+      <div className="section col-7-5">
+        <div>
+          <div className="section-head">
+            <div><span className="eyebrow">EXHIBIT 05</span><h2>Outflows by Category — Monthly</h2></div>
+            <div className="right">Plotted negative</div>
+          </div>
+          <div className="frame">
+            <StackedMonthlySignedChart months={months} sources={outflowSources} sign={-1} />
+            <div className="legend" style={{ marginTop: 10 }}>
+              {outflowSources.map((s) => (
+                <span className="item" key={s.name}><span className="sw" style={{ background: s.color }}></span>{s.name}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="section-head">
+            <div><span className="eyebrow">EXHIBIT 06</span><h2>Composition of Outflows</h2></div>
+            <div className="right">FY 2025</div>
+          </div>
+          <div className="frame" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+            <Donut
+              data={outflowSources.map((s) => ({ name: s.name, color: s.color, value: s.values.reduce((a,b)=>a+b,0) }))}
+              size={210}
+            />
+            <div className="stack-legend" style={{ width: "100%" }}>
+              {outflowSources.map((s) => {
+                const v = s.values.reduce((a,b)=>a+b,0);
+                return (
+                  <span className="item" key={s.name}>
+                    <span className="sw" style={{ background: s.color }}></span>
+                    <span style={{ color: "var(--ink-700)" }}>{s.name}</span>
+                    <span style={{ marginLeft: "auto", fontVariantNumeric: "tabular-nums", color: "var(--ink-900)", fontWeight: 500 }}>{fmt.m(v)}</span>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 07</span><h2>Outflows — Drilldown by Line Item</h2></div>
           <div className="right">Click row to expand</div>
         </div>
         <div className="frame">
@@ -179,10 +297,26 @@ function ReportPostLiquidity() {
         </div>
       </div>
 
+      {/* Cash Instruments */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 08</span><h2>Cash & Liquidity Instruments</h2></div>
+          <div className="right">As of 12.31.2025</div>
+        </div>
+        <div className="frame">
+          <CashInstruments items={cashInstruments} asOf="Dec 31, 2025" />
+          <p className="advisor-note" style={{ marginTop: 14 }}>
+            "92% of cash sits in government MMF and brokered CDs — yield-bearing but liquid. The CD ladder is sized to fund the
+            2026 capital-call schedule without dipping into the SBL. We will not extend duration past 12 months given deployment cadence."
+            <span className="who">— Treasury & deployment plan</span>
+          </p>
+        </div>
+      </div>
+
       <div className="section cols-2">
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 05</span><h2>Tax Cash Flow Detail</h2></div>
+            <div><span className="eyebrow">EXHIBIT 09</span><h2>Tax Cash Flow Detail</h2></div>
             <div className="right">Sale year — elevated</div>
           </div>
           <div className="frame">
@@ -207,7 +341,7 @@ function ReportPostLiquidity() {
         </div>
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 06</span><h2>Debt Service & Credit Lines</h2></div>
+            <div><span className="eyebrow">EXHIBIT 10</span><h2>Debt Service & Credit Lines</h2></div>
             <div className="right">As of 12.31.2025</div>
           </div>
           <div className="frame">
@@ -233,7 +367,7 @@ function ReportPostLiquidity() {
       <div className="section cols-2">
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 07</span><h2>Philanthropic Giving</h2></div>
+            <div><span className="eyebrow">EXHIBIT 11</span><h2>Philanthropic Giving</h2></div>
             <div className="right">Founders' Pledge — Year 1</div>
           </div>
           <div className="frame">
@@ -258,7 +392,7 @@ function ReportPostLiquidity() {
         </div>
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 08</span><h2>Net Cash & Forward Forecast</h2></div>
+            <div><span className="eyebrow">EXHIBIT 12</span><h2>Net Cash & Forward Forecast</h2></div>
             <div className="right">Liquid balance · 2024 → 2026</div>
           </div>
           <div className="frame">
@@ -281,6 +415,61 @@ function ReportPostLiquidity() {
               <span className="who">— Deployment plan</span>
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Forward Forecast — quarterly schedule */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 13</span><h2>Forward Forecast — 2026 Quarterly Schedule</h2></div>
+          <div className="right">Base case · USD millions</div>
+        </div>
+        <div className="frame">
+          <ForecastQuarterly
+            quarters={[
+              { label: "Q1 2026", opening: 158.00e6, closing: 152.40e6 },
+              { label: "Q2 2026", opening: 152.40e6, closing: 154.20e6 },
+              { label: "Q3 2026", opening: 154.20e6, closing: 156.80e6 },
+              { label: "Q4 2026", opening: 156.80e6, closing: 161.50e6 },
+            ]}
+            inflowRows={[
+              { name: "Investment Income (Treasuries, MMF)", color: "#0e1620", values: [1.85e6, 1.95e6, 2.05e6, 2.15e6] },
+              { name: "Dividends",                            color: "#4a5468", values: [0.95e6, 1.10e6, 1.05e6, 1.20e6] },
+              { name: "PE / VC Distributions",                color: "#8a6a2e", values: [0.85e6, 1.45e6, 1.20e6, 2.10e6] },
+              { name: "Sale Escrow — Final Tranche",          color: "#b89657", values: [0, 0, 0, 4.00e6] },
+              { name: "Other (royalty, advisory)",            color: "#d8c393", values: [0.55e6, 0.55e6, 0.55e6, 0.65e6] },
+            ]}
+            outflowRows={[
+              { name: "Federal & State Taxes",   color: "#0e1620", values: [4.50e6, 1.20e6, 1.10e6, 0.85e6] },
+              { name: "Capital Deployment",      color: "#1f4a4f", values: [2.40e6, 2.80e6, 2.60e6, 3.40e6] },
+              { name: "Lifestyle & Household",   color: "#4a5468", values: [0.85e6, 0.85e6, 0.90e6, 0.90e6] },
+              { name: "Philanthropy",            color: "#8a6a2e", values: [0.10e6, 0.20e6, 0.20e6, 3.50e6] },
+              { name: "Debt Service",            color: "#6b7587", values: [0.34e6, 0.34e6, 0.34e6, 0.34e6] },
+              { name: "Insurance & Other",       color: "#d8c393", values: [0.18e6, 0.18e6, 0.18e6, 0.20e6] },
+            ]}
+          />
+          <p className="advisor-note" style={{ marginTop: 14 }}>
+            "2026 normalizes to a stable run-rate after the sale year. Q4 escrow release retires the final earn-out; we recommend deploying it
+            into the Q1 2027 PE call queue rather than holding cash through year-end."
+            <span className="who">— Lead Advisor commentary</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Tabular Monthly Cash Flow */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 14</span><h2>Monthly Cash Flow Statement — Direct Method</h2></div>
+          <div className="right">FY 2025 actual · USD per cell</div>
+        </div>
+        <div className="frame" style={{ overflowX: "auto" }}>
+          <TabularCashFlow
+            months={months}
+            openingCash={168.00e6}
+            closingCash={158.00e6}
+            inflowRows={inflowSources}
+            outflowRows={outflowSources}
+          />
         </div>
       </div>
 

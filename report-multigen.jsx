@@ -30,6 +30,37 @@ function ReportMultiGen() {
     { name: "Royalty & Other",                    color: "#d8c393", values: [0.16,0.14,0.20,0.20,0.17,0.20,0.04,0.05,0.16,0.04,0.05,0.20].map(v=>v*1e6) },
   ];
 
+  // Inflow drilldown — by source with line-item breakdown
+  const inflowDrilldown = [
+    { name: "Trust Distributions (G1 → G2/G3)", color: "#0e1620", value: inflowSources[0].values.reduce((a,b)=>a+b,0), children: [
+      { name: "G1 Marital Trust → Income Beneficiaries", value: 4.85e6, tag: "Mandatory income" },
+      { name: "G2 Generation-Skipping Trust → Discretionary", value: 3.20e6, tag: "Trustee discretion" },
+      { name: "G3 Family Trusts (4) → Education & Maintenance", value: 1.85e6, tag: "HEMS" },
+      { name: "Annual Exclusion Gifts (15 beneficiaries)", value: 0.52e6, tag: "$36k × 15" },
+    ]},
+    { name: "Investment Income (Munis, Divs)", color: "#4a5468", value: inflowSources[1].values.reduce((a,b)=>a+b,0), children: [
+      { name: "Municipal Bond Interest (laddered, AMT-free)", value: 6.40e6, tag: "Tax-exempt" },
+      { name: "Qualified Dividends — Public Equity", value: 4.85e6, tag: "Qualified" },
+      { name: "Treasury & Agency Interest", value: 2.60e6 },
+      { name: "Preferred Stock Dividends", value: 1.20e6 },
+    ]},
+    { name: "PE / Hedge Fund Distributions", color: "#1f4a4f", value: inflowSources[2].values.reduce((a,b)=>a+b,0), children: [
+      { name: "PE Fund Distributions (12 funds)", value: 4.20e6, tag: "Cash + stock" },
+      { name: "Hedge Fund Redemptions (annual gates)", value: 2.35e6, tag: "Multi-strat + Macro" },
+      { name: "Direct Private Co-investments — Realizations", value: 0.95e6 },
+    ]},
+    { name: "Operating Co. Dividends (G1 stake)", color: "#8a6a2e", value: inflowSources[3].values.reduce((a,b)=>a+b,0), children: [
+      { name: "Quarterly Dividend — Apex Industries (35% stake)", value: 5.40e6, tag: "Recurring" },
+      { name: "Year-End Special Dividend", value: 1.10e6 },
+      { name: "Board Compensation (G1 chair)", value: 0.30e6 },
+    ]},
+    { name: "Royalty & Other", color: "#d8c393", value: inflowSources[4].values.reduce((a,b)=>a+b,0), children: [
+      { name: "Mineral Rights Royalty (TX, OK)", value: 1.20e6, tag: "Net of severance tax" },
+      { name: "Intellectual Property Licensing", value: 0.45e6 },
+      { name: "Miscellaneous & Refunds", value: 0.25e6 },
+    ]},
+  ];
+
   const spending = [
     { name: "Federal & State Taxes",     color: "#0e1620", value: 16.80e6, children: [
       { name: "G1 Personal — Q1–Q4 Estimated", value: 6.20e6 },
@@ -79,6 +110,24 @@ function ReportMultiGen() {
     ]},
   ];
 
+  // Outflow stacked monthly (mirrors inflow stack)
+  const outflowSources = [
+    { name: "Federal & State Taxes",     color: "#0e1620", values: [0.85,0.78,2.85,4.55,0.85,2.65,0.85,0.78,2.65,0.85,0.78,1.40].map(v=>v*1e6) },
+    { name: "Lifestyle & Household",      color: "#4a5468", values: [0.78,0.72,0.85,0.78,0.78,0.85,0.78,0.78,0.85,0.78,0.78,0.92].map(v=>v*1e6) },
+    { name: "Distributions to G2/G3",     color: "#1f4a4f", values: [0.30,0.28,0.55,0.42,0.32,0.45,0.45,0.40,0.45,0.42,0.40,1.96].map(v=>v*1e6) },
+    { name: "Philanthropy",               color: "#8a6a2e", values: [0.20,0.18,0.85,0.45,0.20,0.45,0.20,0.20,0.40,0.20,0.18,2.29].map(v=>v*1e6) },
+    { name: "Debt Service",               color: "#6b7587", values: Array(12).fill(0.2375e6) },
+    { name: "Capital Calls (Private)",    color: "#a3823f", values: [0.20,0.22,0.55,1.85,0.25,0.45,0.20,0.30,0.55,0.25,0.20,0.18].map(v=>v*1e6) },
+    { name: "Family Office & Prof'l",     color: "#d8c393", values: [0.05,0.10,0.04,0.10,0.10,0.0625,0.13,0.13,0.10,0.13,0.07,0.16].map(v=>v*1e6) },
+  ];
+
+  const cashInstruments = [
+    { name: "Operating Cash · Checking",       custodian: "First Republic / JPM",      balance: 4.20e6,   yield: 0.10, tenor: "On demand", note: "G1 + Trust + LLC ops accounts", color: "#6b7587" },
+    { name: "Bank Deposits · HY Savings",      custodian: "Meridian Pvt. Bank · Northern Trust", balance: 12.40e6, yield: 4.20, tenor: "On demand", note: "Multi-entity sweep tier 1", color: "#4a5468" },
+    { name: "Money Market Funds · Tax-Exempt", custodian: "Fidelity · FTEXX",          balance: 18.60e6,  yield: 3.55, tenor: "T+1 liquidity", note: "After-tax equivalent ≈ 5.50%", color: "#0e1620" },
+    { name: "Term Deposits · CD Ladder",       custodian: "Brokered, multi-bank",      balance: 8.20e6,   yield: 5.00, tenor: "3·6·9·12 mo rungs", note: "Funds Q4 distributions", color: "#a3823f" },
+  ];
+
   // Entity consolidation matrix
   const entities = [
     { name: "G1 Personal (J. & E. Asher)",       inflows: 9.20e6,  outflows: 12.80e6, net: -3.60e6 },
@@ -91,7 +140,7 @@ function ReportMultiGen() {
 
   return (
     <div className="report compact">
-      <div className="runner left">MERIDIAN · CONSOLIDATED CASH FLOW</div>
+      <div className="runner left">MERIDIAN · CONSOLIDATED CASH FLOW STATEMENT</div>
       <div className="runner right">FY 2025 · 6-ENTITY CONSOLIDATION</div>
 
       <Mast archetype="Asher Family · Multi-Generational" period="Calendar Year 2025 / 2026 Outlook" />
@@ -118,6 +167,20 @@ function ReportMultiGen() {
         <div className="kpi"><span className="label">Consolidated Outflows</span><span className="num">{fmt.m(totalOut)}</span><span className="delta neg">▲ {fmt.pct(6.1)} vs. 2024</span></div>
         <div className="kpi"><span className="label">Net Movement</span><span className="num neg num-neg">{fmt.m(Math.abs(totalNet))}</span><span className="delta muted">funded by liquid reserves</span></div>
         <div className="kpi"><span className="label">Family Distributions</span><span className="num gold">{fmt.m(6.40e6)}</span><span className="delta">G2 (×3), G3 (×4)</span></div>
+      </div>
+
+      {/* Cash Position Summary */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">CASH BALANCE WATERFALL</span><h2>Opening → Inflows → Outflows → Closing</h2></div>
+          <div className="right">Calendar 2025 · YTD 2026</div>
+        </div>
+        <div className="frame">
+          <CashBalanceWaterfall periods={[
+            { label: "FY 2025 (Closed)", asOfStart: "Jan 1, 2025", asOfEnd: "Dec 31, 2025", opening: 31.00e6, inflows: totalIn, outflows: totalOut, closing: 24.00e6 },
+            { label: "YTD 2026", asOfStart: "Jan 1, 2026", asOfEnd: "Apr 25, 2026", opening: 24.00e6, inflows: 12.85e6, outflows: 13.95e6, closing: 22.90e6 },
+          ]} />
+        </div>
       </div>
 
       {/* Entity consolidation table */}
@@ -163,11 +226,11 @@ function ReportMultiGen() {
         </div>
         <div className="frame">
           <div className="legend" style={{ marginBottom: 8 }}>
-            <span className="item"><span className="sw" style={{ background: "#2f6b3a" }}></span>Inflows</span>
-            <span className="item"><span className="sw" style={{ background: "#8a3a2b" }}></span>Outflows</span>
+            <span className="item"><span className="sw" style={{ background: "#2f6b3a" }}></span>Inflows (above zero)</span>
+            <span className="item"><span className="sw" style={{ background: "#8a3a2b" }}></span>Outflows (below zero)</span>
             <span className="item"><span className="sw" style={{ background: "#0e1620", borderRadius: "50%" }}></span>Net (dotted)</span>
           </div>
-          <MonthlyFlowChart data={monthly} />
+          <MonthlyFlowChartSigned data={monthly} />
         </div>
       </div>
 
@@ -212,9 +275,66 @@ function ReportMultiGen() {
         </div>
       </div>
 
+      {/* Inflow drilldown */}
       <div className="section">
         <div className="section-head">
-          <div><span className="eyebrow">EXHIBIT 05</span><h2>Outflows by Category — Drilldown</h2></div>
+          <div><span className="eyebrow">EXHIBIT 05</span><h2>Inflows — Drilldown by Source</h2></div>
+          <div className="right">Click row to expand · USD</div>
+        </div>
+        <div className="frame">
+          <DrilldownList items={inflowDrilldown} total={totalIn} />
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 8px 4px", borderTop: "1px solid var(--ink-700)", marginTop: 4 }}>
+            <span style={{ fontWeight: 600 }}>Total Inflows</span>
+            <span style={{ fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>{fmt.full(totalIn)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Outflows mirrored — stacked monthly + composition donut */}
+      <div className="section col-7-5">
+        <div>
+          <div className="section-head">
+            <div><span className="eyebrow">EXHIBIT 06</span><h2>Outflows by Category — Monthly</h2></div>
+            <div className="right">Plotted negative</div>
+          </div>
+          <div className="frame">
+            <StackedMonthlySignedChart months={months} sources={outflowSources} sign={-1} />
+            <div className="legend" style={{ marginTop: 10 }}>
+              {outflowSources.map((s) => (
+                <span className="item" key={s.name}><span className="sw" style={{ background: s.color }}></span>{s.name}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="section-head">
+            <div><span className="eyebrow">EXHIBIT 07</span><h2>Composition</h2></div>
+            <div className="right">FY 2025</div>
+          </div>
+          <div className="frame" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+            <Donut
+              data={outflowSources.map((s) => ({ name: s.name, color: s.color, value: s.values.reduce((a,b)=>a+b,0) }))}
+              size={210}
+            />
+            <div className="stack-legend" style={{ width: "100%" }}>
+              {outflowSources.map((s) => {
+                const v = s.values.reduce((a,b)=>a+b,0);
+                return (
+                  <span className="item" key={s.name}>
+                    <span className="sw" style={{ background: s.color }}></span>
+                    <span style={{ color: "var(--ink-700)" }}>{s.name}</span>
+                    <span style={{ marginLeft: "auto", fontVariantNumeric: "tabular-nums", color: "var(--ink-900)", fontWeight: 500 }}>{fmt.m(v)}</span>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 08</span><h2>Outflows — Drilldown by Line Item</h2></div>
           <div className="right">Click row to expand</div>
         </div>
         <div className="frame">
@@ -226,10 +346,27 @@ function ReportMultiGen() {
         </div>
       </div>
 
+      {/* Cash Instruments */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 09</span><h2>Cash & Liquidity Instruments</h2></div>
+          <div className="right">Consolidated · as of 12.31.2025</div>
+        </div>
+        <div className="frame">
+          <CashInstruments items={cashInstruments} asOf="Dec 31, 2025" />
+          <p className="advisor-note" style={{ marginTop: 14 }}>
+            "Tax-exempt MMF carries the bulk of liquidity at a 5.50% taxable-equivalent yield for top-bracket G1 holdings. CD ladder
+            is sized to fund Q4 trust distributions without disrupting the muni allocation. Cross-entity cash is swept nightly to
+            the consolidated Northern Trust master account."
+            <span className="who">— Treasury & multi-entity cash management</span>
+          </p>
+        </div>
+      </div>
+
       <div className="section cols-2">
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 06</span><h2>Tax Cash Flow — Multi-Entity</h2></div>
+            <div><span className="eyebrow">EXHIBIT 10</span><h2>Tax Cash Flow — Multi-Entity</h2></div>
             <div className="right">Federal + State + Local</div>
           </div>
           <div className="frame">
@@ -249,7 +386,7 @@ function ReportMultiGen() {
         </div>
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 07</span><h2>Debt Service & Credit Lines</h2></div>
+            <div><span className="eyebrow">EXHIBIT 11</span><h2>Debt Service & Credit Lines</h2></div>
             <div className="right">Across residences & entities</div>
           </div>
           <div className="frame">
@@ -271,7 +408,7 @@ function ReportMultiGen() {
       <div className="section cols-2">
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 08</span><h2>Philanthropic Giving</h2></div>
+            <div><span className="eyebrow">EXHIBIT 12</span><h2>Philanthropic Giving</h2></div>
             <div className="right">Foundation + Direct</div>
           </div>
           <div className="frame">
@@ -298,7 +435,7 @@ function ReportMultiGen() {
         </div>
         <div>
           <div className="section-head">
-            <div><span className="eyebrow">EXHIBIT 09</span><h2>Net Cash & Forward Forecast</h2></div>
+            <div><span className="eyebrow">EXHIBIT 13</span><h2>Net Cash & Forward Forecast</h2></div>
             <div className="right">Consolidated reserves · 2024 → 2026</div>
           </div>
           <div className="frame">
@@ -321,6 +458,61 @@ function ReportMultiGen() {
               <span className="who">— Trust counsel recommendation</span>
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Forward Forecast — quarterly schedule */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 14</span><h2>Forward Forecast — 2026 Quarterly Schedule</h2></div>
+          <div className="right">Consolidated · base case · USD millions</div>
+        </div>
+        <div className="frame">
+          <ForecastQuarterly
+            quarters={[
+              { label: "Q1 2026", opening: 24.00e6, closing: 22.90e6 },
+              { label: "Q2 2026", opening: 22.90e6, closing: 24.10e6 },
+              { label: "Q3 2026", opening: 24.10e6, closing: 25.40e6 },
+              { label: "Q4 2026", opening: 25.40e6, closing: 28.20e6 },
+            ]}
+            inflowRows={[
+              { name: "Trust Distributions (G1 → G2/G3)",  color: "#0e1620", values: [2.65e6, 2.75e6, 2.70e6, 3.20e6] },
+              { name: "Investment Income (Munis, Divs)",   color: "#4a5468", values: [3.85e6, 3.95e6, 3.90e6, 4.50e6] },
+              { name: "PE / Hedge Fund Distributions",     color: "#1f4a4f", values: [1.55e6, 1.85e6, 1.75e6, 2.40e6] },
+              { name: "Operating Co. Dividends (G1 stake)", color: "#8a6a2e", values: [1.62e6, 1.62e6, 1.62e6, 2.20e6] },
+              { name: "Royalty & Other",                    color: "#d8c393", values: [0.50e6, 0.55e6, 0.45e6, 0.55e6] },
+            ]}
+            outflowRows={[
+              { name: "Federal & State Taxes",   color: "#0e1620", values: [4.40e6, 3.85e6, 3.65e6, 2.20e6] },
+              { name: "Lifestyle & Household",   color: "#4a5468", values: [2.45e6, 2.50e6, 2.50e6, 2.65e6] },
+              { name: "Capital Deployment",      color: "#a3823f", values: [1.20e6, 1.40e6, 1.30e6, 1.85e6] },
+              { name: "Debt Service",            color: "#6b7587", values: [0.62e6, 0.62e6, 0.62e6, 0.62e6] },
+              { name: "Philanthropy",            color: "#8a6a2e", values: [0.20e6, 0.30e6, 0.30e6, 1.85e6] },
+              { name: "Insurance & Trustee Fees", color: "#d8c393", values: [0.40e6, 0.40e6, 0.40e6, 0.45e6] },
+            ]}
+          />
+          <p className="advisor-note" style={{ marginTop: 14 }}>
+            "Forecast assumes the 35% Apex Industries dividend holds through 2026 and the muni ladder rolls without yield compression.
+            G3 distributions step up modestly as two beneficiaries reach age-25 milestones in Q3."
+            <span className="who">— Lead Advisor commentary</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Tabular Monthly Cash Flow */}
+      <div className="section">
+        <div className="section-head">
+          <div><span className="eyebrow">EXHIBIT 15</span><h2>Monthly Cash Flow Statement — Direct Method</h2></div>
+          <div className="right">FY 2025 actual · consolidated · USD per cell</div>
+        </div>
+        <div className="frame" style={{ overflowX: "auto" }}>
+          <TabularCashFlow
+            months={months}
+            openingCash={31.00e6}
+            closingCash={24.00e6}
+            inflowRows={inflowSources}
+            outflowRows={outflowSources}
+          />
         </div>
       </div>
 

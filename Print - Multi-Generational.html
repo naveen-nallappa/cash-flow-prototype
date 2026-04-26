@@ -3,29 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cash Flow Report — Multi-Generational Family · Meridian Family Office</title>
+  <title>Cash Flow Deck — Multi-Generational Family · Meridian Family Office</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="print.css" />
+  <link rel="stylesheet" href="print-landscape.css?v=2" />
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="deck-stage.js"></script>
+  <style>
+    body { margin: 0; background: #1a1410; }
+    .deck-toolbar {
+      position: fixed; top: 6px; right: 8px;
+      display: flex; gap: 6px; z-index: 100;
+      font-family: 'Inter Tight', sans-serif;
+      opacity: 0.4; transition: opacity 0.15s;
+    }
+    .deck-toolbar:hover { opacity: 1; }
+    .deck-toolbar a, .deck-toolbar button {
+      font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 4px 8px; background: rgba(14,22,32,0.85); color: #fbf8f3;
+      border: 1px solid rgba(251,248,243,0.25); cursor: pointer; text-decoration: none;
+      backdrop-filter: blur(6px);
+    }
+    .deck-toolbar a:hover { border-color: rgba(251,248,243,0.6); }
+  </style>
 </head>
-<body class="print-doc">
-  <div class="print-toolbar">
+<body>
+  <div class="deck-toolbar">
     <a class="secondary" href="index.html">← All Reports</a>
-    <button onclick="window.print()">Print / Save as PDF</button>
   </div>
-  <div id="root"></div>
+  <deck-stage width="1280" height="720">
+    <div id="root"></div>
+  </deck-stage>
 
   <script type="text/babel" src="charts.jsx"></script>
-  <script type="text/babel" src="print-shared.jsx"></script>
-  <script type="text/babel" src="print-multigen.jsx"></script>
+  <script type="text/babel" src="print-landscape-shared.jsx"></script>
+  <script type="text/babel" src="print-multigen-landscape.jsx"></script>
   <script type="text/babel" data-presets="react">
-    ReactDOM.createRoot(document.getElementById("root")).render(<window.PrintMultiGen />);
+    const stage = document.querySelector('deck-stage');
+    const root = document.getElementById('root');
+    ReactDOM.createRoot(root).render(<window.PrintMultiGenLandscape />);
+    setTimeout(() => {
+      while (root.firstChild) stage.appendChild(root.firstChild);
+      root.remove();
+    }, 50);
   </script>
 </body>
 </html>

@@ -44,16 +44,11 @@
       padding: 24px;
       display: flex; flex-direction: column;
       gap: 14px;
-      text-decoration: none;
       color: inherit;
       position: relative;
-      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+      transition: border-color 160ms ease;
     }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(14,22,32,0.08);
-      border-color: var(--ink-900);
-    }
+    .card:hover { border-color: var(--ink-900); }
     .card .label {
       font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-500);
     }
@@ -65,15 +60,22 @@
     }
     .card .meta .k { color: var(--ink-500); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; }
     .card .meta .v { color: var(--ink-900); font-weight: 500; font-variant-numeric: tabular-nums; }
-    .card .actions { display:flex; gap:10px; padding-top: 8px; }
-    .card .actions span {
-      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-700);
+    .card .actions { display:flex; gap:8px; padding-top: 8px; }
+    .card .actions a {
+      flex: 1;
+      font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-700);
       border: 1px solid var(--rule-strong);
-      padding: 6px 10px;
+      padding: 9px 10px;
+      text-decoration: none;
+      text-align: center;
+      transition: background 140ms ease, color 140ms ease, transform 140ms ease;
     }
+    .card .actions a:hover { transform: translateY(-1px); }
     .card .actions .primary {
       background: var(--ink-900); color: var(--paper); border-color: var(--ink-900);
     }
+    .card .actions .primary:hover { background: var(--gold-700); border-color: var(--gold-700); color: var(--paper); }
+    .card .actions .secondary:hover { background: var(--ink-900); color: var(--paper); border-color: var(--ink-900); }
     .canvas-card {
       grid-column: 1 / -1;
       background: linear-gradient(135deg, #0e1620, #2a3445);
@@ -83,8 +85,9 @@
     .canvas-card h3, .canvas-card .label { color: var(--paper); }
     .canvas-card .label { color: var(--gold-300); }
     .canvas-card p { font-size: 14px; color: rgba(251,248,243,0.78); margin: 0; max-width: 60ch; }
-    .canvas-card .actions span { border-color: rgba(251,248,243,0.3); color: var(--paper); background: transparent; }
+    .canvas-card .actions a { border-color: rgba(251,248,243,0.3); color: var(--paper); background: transparent; }
     .canvas-card .actions .primary { background: var(--gold-600); border-color: var(--gold-600); color: var(--ink-900); }
+    .canvas-card .actions .primary:hover { background: var(--gold-300); border-color: var(--gold-300); color: var(--ink-900); }
     .footer-note {
       margin-top: 60px;
       padding-top: 18px;
@@ -105,23 +108,22 @@
 
     <h1 class="lead">Cash flow reporting <em>for sophisticated households.</em></h1>
     <p class="sub">A library of three illustrative exhibits — each tailored to a distinct UHNW archetype.
-       Each report is available as an interactive on-screen view and as a print-formatted, 8.5×11 PDF-ready document for client meetings.</p>
+       Each report is available as a single-page interactive view (with drilldowns and forecast schedule) and as a landscape slide deck (1280×720) for client meetings and presentations.</p>
 
     <div class="group-eyebrow">— Three Client Archetypes</div>
     <div class="grid">
-      <a class="card canvas-card" href="Cash Flow Exhibits.html">
+      <div class="card canvas-card">
         <div class="label">Designer Canvas · All Three</div>
         <h3>Side-by-side comparison view</h3>
         <p>Interactive design canvas presenting all three archetypes in a pannable, zoomable layout. Use this for internal review,
            client conversations on-screen, and design iteration.</p>
         <div class="actions">
-          <span class="primary">Open Canvas →</span>
-          <span>Interactive · 1280px artboards</span>
+          <a class="primary" href="Cash Flow Exhibits.html">Open Canvas →</a>
         </div>
-      </a>
+      </div>
 
-      <a class="card" href="Print - Business Owner.html">
-        <div class="label">Archetype 01 · 4 pages</div>
+      <div class="card">
+        <div class="label">Archetype 01 · 11 slides</div>
         <h3>Operating Business Owner</h3>
         <div class="meta">
           <div><div class="k">NW</div><div class="v">$285M</div></div>
@@ -130,13 +132,13 @@
           <div><div class="k">Eff. Tax</div><div class="v">37.6%</div></div>
         </div>
         <div class="actions">
-          <span class="primary">Open Report →</span>
-          <span>Print Ready</span>
+          <a class="primary" href="Interactive - Business Owner.html">Interactive →</a>
+          <a class="secondary" href="Print - Business Owner.html">Slide Deck →</a>
         </div>
-      </a>
+      </div>
 
-      <a class="card" href="Print - Post-Liquidity.html">
-        <div class="label">Archetype 02 · 4 pages</div>
+      <div class="card">
+        <div class="label">Archetype 02 · 11 slides</div>
         <h3>Post-Liquidity Entrepreneur</h3>
         <div class="meta">
           <div><div class="k">NW</div><div class="v">$340M</div></div>
@@ -145,13 +147,13 @@
           <div><div class="k">Sale Tax</div><div class="v">$18.40M</div></div>
         </div>
         <div class="actions">
-          <span class="primary">Open Report →</span>
-          <span>Print Ready</span>
+          <a class="primary" href="Interactive - Post-Liquidity.html">Interactive →</a>
+          <a class="secondary" href="Print - Post-Liquidity.html">Slide Deck →</a>
         </div>
-      </a>
+      </div>
 
-      <a class="card" href="Print - Multi-Generational.html">
-        <div class="label">Archetype 03 · 5 pages</div>
+      <div class="card">
+        <div class="label">Archetype 03 · 12 slides</div>
         <h3>Multi-Generational Family</h3>
         <div class="meta">
           <div><div class="k">NW</div><div class="v">$420M</div></div>
@@ -160,15 +162,15 @@
           <div><div class="k">Distrib.</div><div class="v">$6.40M</div></div>
         </div>
         <div class="actions">
-          <span class="primary">Open Report →</span>
-          <span>Print Ready</span>
+          <a class="primary" href="Interactive - Multi-Generational.html">Interactive →</a>
+          <a class="secondary" href="Print - Multi-Generational.html">Slide Deck →</a>
         </div>
-      </a>
+      </div>
     </div>
 
     <div class="footer-note">
       All figures and entities illustrative. Prepared by Meridian Family Office (mock brand) for design review purposes only.
-      To produce a PDF: open any print report and use your browser's Print → Save as PDF (works in Chrome, Safari, Edge).
+      Each landscape deck navigates with arrow keys or click. To produce a PDF: open any deck and use your browser's Print → Save as PDF (works in Chrome, Safari, Edge).
     </div>
   </div>
 </body>

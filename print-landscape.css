@@ -1,0 +1,393 @@
+/* Landscape print decks — 1280×720 slides served via <deck-stage>.
+   Each .lp-slide is a single 1280×720 board. Reuses --ink-*, --paper, --gold-*, --rule from styles.css.
+*/
+
+:root {
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --slide-pad-x: 64px;
+  --slide-pad-y: 44px;
+}
+
+deck-stage {
+  background: #1a1410;
+}
+
+.lp-slide {
+  width: var(--slide-w);
+  height: var(--slide-h);
+  background: var(--paper);
+  color: var(--ink-900);
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.45;
+  position: relative;
+  overflow: hidden;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.lp-slide.tinted { background: var(--paper-2); }
+.lp-slide.dark   { background: #0e1620; color: var(--paper); }
+.lp-slide.gold   { background: #1a1410; color: var(--paper); }
+
+/* ——— RUNNERS (corner marks) ——— */
+.lp-runner {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+}
+.lp-slide.dark .lp-runner, .lp-slide.gold .lp-runner { color: rgba(251,248,243,0.55); }
+.lp-runner.tl { top: 22px; left: 24px; }
+.lp-runner.tr { top: 22px; right: 24px; }
+.lp-runner.bl { bottom: 22px; left: 24px; }
+.lp-runner.br { bottom: 22px; right: 24px; }
+
+/* ——— MASTHEAD ——— */
+.lp-mast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--ink-900);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+.lp-slide.dark .lp-mast, .lp-slide.gold .lp-mast { border-bottom-color: rgba(251,248,243,0.25); }
+.lp-mast .brand { display: flex; align-items: center; gap: 12px; }
+.lp-mast .brand-mark {
+  width: 28px; height: 28px;
+  border: 1px solid currentColor;
+  display: grid; place-items: center;
+  font-family: var(--serif);
+  font-size: 17px;
+}
+.lp-mast .brand-name {
+  font-family: var(--serif);
+  font-size: 19px;
+  letter-spacing: 0.005em;
+  line-height: 1;
+}
+.lp-mast .brand-sub {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin-top: 4px;
+  white-space: nowrap;
+}
+.lp-slide.dark .lp-mast .brand-sub, .lp-slide.gold .lp-mast .brand-sub { color: rgba(251,248,243,0.55); }
+.lp-mast .meta {
+  text-align: right;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+  line-height: 1.5;
+}
+.lp-slide.dark .lp-mast .meta, .lp-slide.gold .lp-mast .meta { color: rgba(251,248,243,0.65); }
+.lp-mast .meta strong { color: var(--ink-900); font-weight: 500; }
+.lp-slide.dark .lp-mast .meta strong, .lp-slide.gold .lp-mast .meta strong { color: var(--paper); }
+
+/* ——— SECTION HEAD inside a slide ——— */
+.lp-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--ink-300);
+  padding-bottom: 6px;
+  margin: 4px 0 10px;
+  flex-shrink: 0;
+  gap: 24px;
+}
+.lp-section-head .eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gold-700);
+  text-transform: uppercase;
+  display: block;
+}
+.lp-section-head h2 {
+  margin: 3px 0 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.lp-section-head .right {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ——— HEADLINE on cover ——— */
+.lp-headline h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 52px;
+  line-height: 1.04;
+  letter-spacing: -0.005em;
+  margin: 0 0 14px;
+  max-width: 22ch;
+}
+.lp-headline h1 em { font-style: italic; color: var(--gold-700); }
+.lp-slide.dark .lp-headline h1 em, .lp-slide.gold .lp-headline h1 em { color: var(--gold-400); }
+.lp-headline .lede {
+  font-size: 14px;
+  color: var(--ink-700);
+  max-width: 76ch;
+  line-height: 1.55;
+}
+.lp-slide.dark .lp-headline .lede, .lp-slide.gold .lp-headline .lede { color: rgba(251,248,243,0.78); }
+
+/* ——— KPI strip (cover) ——— */
+.lp-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+  margin: 0;
+}
+.lp-slide.dark .lp-kpi-strip, .lp-slide.gold .lp-kpi-strip {
+  background: rgba(251,248,243,0.04);
+  border-color: rgba(251,248,243,0.2);
+}
+.lp-kpi {
+  padding: 14px 18px;
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.lp-slide.dark .lp-kpi, .lp-slide.gold .lp-kpi { border-right-color: rgba(251,248,243,0.15); }
+.lp-kpi:last-child { border-right: 0; }
+.lp-kpi .label {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-600);
+}
+.lp-slide.dark .lp-kpi .label, .lp-slide.gold .lp-kpi .label { color: rgba(251,248,243,0.6); }
+.lp-kpi .num {
+  font-family: var(--serif); font-size: 24px; line-height: 1;
+  letter-spacing: -0.01em; font-weight: 500;
+}
+.lp-kpi .delta { font-size: 10px; color: var(--ink-600); }
+
+/* ——— FRAME (chart container) ——— */
+.lp-frame {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.lp-frame.tinted { background: var(--paper-2); }
+.lp-frame .frame-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.lp-frame .frame-head .t { font-family: var(--serif); font-size: 13px; font-weight: 500; }
+.lp-frame .frame-head .s { font-size: 10px; color: var(--ink-500); letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* Force charts to fit their flex container instead of expanding by viewBox aspect */
+/* moved to end of file for specificity */
+
+/* ——— TABLES ——— */
+.lp-slide table.lp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+.lp-slide table.lp-table th {
+  text-align: left; font-weight: 500;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-600);
+  border-bottom: 1px solid var(--ink-300);
+  padding: 7px 8px;
+}
+.lp-slide table.lp-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-800);
+}
+.lp-slide table.lp-table td.num, .lp-slide table.lp-table th.num { text-align: right; }
+.lp-slide table.lp-table tr.total td {
+  border-top: 1px solid var(--ink-700);
+  border-bottom: 1px solid var(--ink-700);
+  font-weight: 600;
+  color: var(--ink-900);
+}
+.lp-slide table.lp-table tr.subtle td { color: var(--ink-600); }
+
+/* ——— LEGEND ——— */
+.lp-legend {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  font-size: 10.5px; color: var(--ink-700);
+}
+.lp-legend .item { display: inline-flex; align-items: center; gap: 6px; }
+.lp-legend .sw { width: 11px; height: 11px; display: inline-block; }
+
+/* ——— ADVISOR NOTE ——— */
+.lp-advisor-note {
+  border-left: 2px solid var(--gold-600);
+  padding: 4px 14px;
+  font-style: italic;
+  color: var(--ink-700);
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.lp-advisor-note .who {
+  display: block;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin-top: 6px;
+}
+
+/* ——— FOOTER ——— */
+.lp-footer {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  font-size: 9px;
+  color: var(--ink-500);
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 14px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+.lp-slide.dark .lp-footer, .lp-slide.gold .lp-footer {
+  border-top-color: rgba(251,248,243,0.18);
+  color: rgba(251,248,243,0.55);
+}
+
+.lp-stretch { flex: 1; min-height: 0; }
+.lp-spacer-sm { height: 8px; }
+.lp-spacer { height: 14px; }
+.lp-divider { height: 1px; background: var(--rule); margin: 12px 0; }
+
+/* ——— TWO-COLUMN GRID ——— */
+.lp-cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lp-cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.lp-col-7-5 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; }
+.lp-col-5-7 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 18px; }
+
+/* ——— SECTION DIVIDER SLIDE ——— */
+.lp-divider-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60px 80px;
+}
+.lp-divider-slide .top {
+  display: flex; align-items: center; gap: 14px;
+}
+.lp-divider-slide .mark {
+  width: 38px; height: 38px; border: 1px solid currentColor;
+  display: grid; place-items: center; font-family: var(--serif); font-size: 22px;
+}
+.lp-divider-slide .top-name { font-family: var(--serif); font-size: 19px; letter-spacing: 0.005em; }
+.lp-divider-slide .center {
+  display: flex; flex-direction: column; gap: 18px;
+}
+.lp-divider-slide .section-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+}
+.lp-divider-slide h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 84px;
+  line-height: 0.98;
+  letter-spacing: -0.012em;
+  margin: 0;
+  max-width: 18ch;
+}
+.lp-divider-slide h1 em { font-style: italic; color: var(--gold-400); }
+.lp-divider-slide .blurb {
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 60ch;
+  color: rgba(251,248,243,0.75);
+}
+.lp-divider-slide .bottom {
+  display: flex; justify-content: space-between; align-items: end;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(251,248,243,0.55);
+}
+.lp-divider-slide .index-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 32px;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  color: rgba(251,248,243,0.7);
+  margin-top: 14px;
+  max-width: 600px;
+}
+.lp-divider-slide .index-table .row {
+  display: grid; grid-template-columns: auto 1fr; gap: 12px;
+  border-top: 1px solid rgba(251,248,243,0.15);
+  padding: 6px 0;
+}
+.lp-divider-slide .index-table .row .n {
+  font-family: var(--mono); color: var(--gold-400); width: 28px;
+}
+
+/* ——— CHART SCALE: charts use SVG; we just give them a height. */
+.lp-chart-tall  { height: 320px; }
+.lp-chart-mid   { height: 240px; }
+.lp-chart-short { height: 180px; }
+
+/* ——— DRILLDOWN ROW (print version) ——— */
+.lp-slide .drill-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 14px;
+  align-items: center;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 11.5px;
+}
+.lp-slide .drill-row .name {
+  font-weight: 500; color: var(--ink-900);
+  display: flex; align-items: center; gap: 10px;
+}
+.lp-slide .drill-row .bar-wrap { width: 180px; height: 6px; background: var(--ink-100); }
+.lp-slide .drill-row .bar { height: 100%; }
+.lp-slide .drill-row .pct { font-size: 10.5px; color: var(--ink-500); width: 50px; text-align: right; font-variant-numeric: tabular-nums; }
+.lp-slide .drill-row .amt { font-variant-numeric: tabular-nums; color: var(--ink-900); width: 100px; text-align: right; }
+
+/* ——— ENSURE charts.jsx tooltips don't overflow weirdly inside a slide ——— */
+.lp-slide svg { display: block; }
+
+/* Print-to-PDF: deck_stage handles @page; we pin background */
+@media print {
+  .lp-slide { box-shadow: none !important; }
+}
+
+/* Force charts to fit their flex container instead of expanding by viewBox aspect.
+   Placed at end of file so it wins specificity ties with earlier .lp-slide svg rule. */
+.lp-slide .lp-chart-fit { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; align-items: stretch; }
+.lp-slide .lp-chart-fit > div { flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; width: 100%; }
+.lp-slide .lp-chart-fit svg { width: 100% !important; height: 100% !important; display: block; flex: 1; }
