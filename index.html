@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meridian Family Office — Cash Flow Exhibits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { background: #ece6d8; min-height: 100vh; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 80px 48px 120px; }
+    .mast {
+      display:flex; align-items:center; gap:14px;
+      border-bottom: 1px solid var(--ink-900);
+      padding-bottom: 16px;
+      margin-bottom: 36px;
+    }
+    .mast .mark {
+      width: 38px; height: 38px; border:1px solid var(--ink-900);
+      display:grid; place-items:center;
+      font-family: var(--serif); font-size: 22px;
+    }
+    .mast .name { font-family: var(--serif); font-size: 26px; }
+    .mast .sub { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-600); margin-top:2px; }
+    h1.lead { font-family: var(--serif); font-weight: 400; font-size: 56px; line-height: 1.05; margin: 0 0 14px; letter-spacing: -0.01em; }
+    h1.lead em { font-style: italic; color: var(--gold-700); }
+    p.sub { font-size: 14px; color: var(--ink-700); max-width: 64ch; line-height: 1.55; margin: 0 0 36px; }
+    .group-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.16em;
+      color: var(--gold-700); text-transform: uppercase;
+      margin: 32px 0 8px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--rule-strong);
+      padding: 24px;
+      display: flex; flex-direction: column;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(14,22,32,0.08);
+      border-color: var(--ink-900);
+    }
+    .card .label {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-500);
+    }
+    .card h3 { font-family: var(--serif); font-weight: 500; font-size: 22px; margin: 0; line-height: 1.15; }
+    .card .meta {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px;
+      padding-top: 12px; border-top: 1px solid var(--rule);
+      font-size: 11px;
+    }
+    .card .meta .k { color: var(--ink-500); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; }
+    .card .meta .v { color: var(--ink-900); font-weight: 500; font-variant-numeric: tabular-nums; }
+    .card .actions { display:flex; gap:10px; padding-top: 8px; }
+    .card .actions span {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-700);
+      border: 1px solid var(--rule-strong);
+      padding: 6px 10px;
+    }
+    .card .actions .primary {
+      background: var(--ink-900); color: var(--paper); border-color: var(--ink-900);
+    }
+    .canvas-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #0e1620, #2a3445);
+      color: var(--paper);
+      border-color: var(--ink-900);
+    }
+    .canvas-card h3, .canvas-card .label { color: var(--paper); }
+    .canvas-card .label { color: var(--gold-300); }
+    .canvas-card p { font-size: 14px; color: rgba(251,248,243,0.78); margin: 0; max-width: 60ch; }
+    .canvas-card .actions span { border-color: rgba(251,248,243,0.3); color: var(--paper); background: transparent; }
+    .canvas-card .actions .primary { background: var(--gold-600); border-color: var(--gold-600); color: var(--ink-900); }
+    .footer-note {
+      margin-top: 60px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+      font-size: 11px; color: var(--ink-500); line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="mast">
+      <div class="mark">M</div>
+      <div>
+        <div class="name">Meridian Family Office</div>
+        <div class="sub">Private Wealth · Cash Flow Exhibits Library</div>
+      </div>
+    </div>
+
+    <h1 class="lead">Cash flow reporting <em>for sophisticated households.</em></h1>
+    <p class="sub">A library of three illustrative exhibits — each tailored to a distinct UHNW archetype.
+       Each report is available as an interactive on-screen view and as a print-formatted, 8.5×11 PDF-ready document for client meetings.</p>
+
+    <div class="group-eyebrow">— Three Client Archetypes</div>
+    <div class="grid">
+      <a class="card canvas-card" href="Cash Flow Exhibits.html">
+        <div class="label">Designer Canvas · All Three</div>
+        <h3>Side-by-side comparison view</h3>
+        <p>Interactive design canvas presenting all three archetypes in a pannable, zoomable layout. Use this for internal review,
+           client conversations on-screen, and design iteration.</p>
+        <div class="actions">
+          <span class="primary">Open Canvas →</span>
+          <span>Interactive · 1280px artboards</span>
+        </div>
+      </a>
+
+      <a class="card" href="Print - Business Owner.html">
+        <div class="label">Archetype 01 · 4 pages</div>
+        <h3>Operating Business Owner</h3>
+        <div class="meta">
+          <div><div class="k">NW</div><div class="v">$285M</div></div>
+          <div><div class="k">Entities</div><div class="v">7 consolidated</div></div>
+          <div><div class="k">Net Inflow</div><div class="v">$15.18M</div></div>
+          <div><div class="k">Eff. Tax</div><div class="v">37.6%</div></div>
+        </div>
+        <div class="actions">
+          <span class="primary">Open Report →</span>
+          <span>Print Ready</span>
+        </div>
+      </a>
+
+      <a class="card" href="Print - Post-Liquidity.html">
+        <div class="label">Archetype 02 · 4 pages</div>
+        <h3>Post-Liquidity Entrepreneur</h3>
+        <div class="meta">
+          <div><div class="k">NW</div><div class="v">$340M</div></div>
+          <div><div class="k">Entities</div><div class="v">Trust + 4 LLCs</div></div>
+          <div><div class="k">Deployed</div><div class="v">$11.20M</div></div>
+          <div><div class="k">Sale Tax</div><div class="v">$18.40M</div></div>
+        </div>
+        <div class="actions">
+          <span class="primary">Open Report →</span>
+          <span>Print Ready</span>
+        </div>
+      </a>
+
+      <a class="card" href="Print - Multi-Generational.html">
+        <div class="label">Archetype 03 · 5 pages</div>
+        <h3>Multi-Generational Family</h3>
+        <div class="meta">
+          <div><div class="k">NW</div><div class="v">$420M</div></div>
+          <div><div class="k">Entities</div><div class="v">6 · 14 accts</div></div>
+          <div><div class="k">Generations</div><div class="v">G1·G2·G3</div></div>
+          <div><div class="k">Distrib.</div><div class="v">$6.40M</div></div>
+        </div>
+        <div class="actions">
+          <span class="primary">Open Report →</span>
+          <span>Print Ready</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="footer-note">
+      All figures and entities illustrative. Prepared by Meridian Family Office (mock brand) for design review purposes only.
+      To produce a PDF: open any print report and use your browser's Print → Save as PDF (works in Chrome, Safari, Edge).
+    </div>
+  </div>
+</body>
+</html>
